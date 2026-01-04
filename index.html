@@ -3,57 +3,158 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>毛概刷题神器</title>
+    <title>毛概刷题神器 Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    animation: {
+                        'bounce-slow': 'bounce 2s infinite',
+                        'pulse-slow': 'pulse 3s infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                        'shake': 'shake 0.5s ease-in-out',
+                        'confetti': 'confetti 1s ease-out forwards',
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        /* iOS 风格滚动条 */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 4px;
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
         }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
+        @keyframes confetti {
+            0% { transform: scale(0) rotate(0deg); opacity: 1; }
+            100% { transform: scale(1.5) rotate(180deg); opacity: 0; }
         }
-        /* 动画类 */
-        .fade-in-up {
-            animation: fadeInUp 0.3s ease-out forwards;
-        }
-        .fade-in {
-            animation: fadeIn 0.3s ease-out forwards;
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(10px); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes progressFill {
+            from { width: 0%; }
+        }
+        .animate-slideUp { animation: slideUp 0.4s ease-out forwards; }
+        .animate-slideIn { animation: slideIn 0.3s ease-out forwards; }
+        .animate-scaleIn { animation: scaleIn 0.3s ease-out forwards; }
+        
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; }
+        
+        body {
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        
+        .glass { 
+            background: rgba(255, 255, 255, 0.8); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .dark .glass { 
+            background: rgba(30, 41, 59, 0.8); 
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #EC4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
+        }
+        .card-hover:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+            box-shadow: 0 4px 15px -3px rgba(59, 130, 246, 0.5);
+        }
+        .btn-primary:hover {
+            box-shadow: 0 6px 20px -3px rgba(59, 130, 246, 0.6);
+        }
+        
+        .progress-ring {
+            transition: stroke-dashoffset 0.5s ease-out;
+        }
+        
+        .option-btn {
+            transition: all 0.2s ease;
+        }
+        .option-btn:not(:disabled):hover {
+            transform: translateX(4px);
+            border-color: #3B82F6;
+        }
+        
+        .streak-fire {
+            filter: drop-shadow(0 0 8px rgba(251, 146, 60, 0.6));
+        }
+        
+        /* Toast notification */
+        .toast {
+            animation: slideUp 0.3s ease-out, slideUp 0.3s ease-in 2.7s reverse forwards;
+        }
+        
+        /* Modal backdrop */
+        .modal-backdrop {
+            animation: fadeIn 0.2s ease-out;
         }
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-        body {
-            -webkit-tap-highlight-color: transparent;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        
+        /* Answer card grid */
+        .answer-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+            gap: 8px;
         }
     </style>
 </head>
-<body class="bg-[#F2F2F7] text-slate-800 h-screen overflow-hidden flex flex-col">
-
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 h-screen overflow-hidden flex flex-col transition-colors duration-300">
     <!-- 作者标签 -->
-    <div class="absolute top-4 left-6 z-30 opacity-60 hover:opacity-100 transition-opacity flex items-center gap-1.5 pointer-events-none">
-        <i data-lucide="user" class="w-3.5 h-3.5 text-slate-600"></i>
-        <span class="text-[10px] font-bold tracking-widest text-slate-600 uppercase">Author: meanjey</span>
+    <div class="absolute top-3 left-4 z-50 opacity-50 hover:opacity-100 transition-opacity flex items-center gap-1.5">
+        <i data-lucide="sparkles" class="w-3 h-3 text-purple-500"></i>
+        <span class="text-[10px] font-bold tracking-wider text-slate-500 dark:text-slate-400">Pro Edition by meanjey</span>
     </div>
 
     <!-- 主容器 -->
-    <div id="app" class="w-full h-full max-w-lg mx-auto bg-white sm:rounded-[2.5rem] sm:my-8 sm:h-[90%] sm:shadow-2xl relative overflow-hidden flex flex-col">
-        <!-- 内容将被 JS 动态渲染到这里 -->
+    <div id="app" class="w-full h-full max-w-lg mx-auto bg-white dark:bg-slate-800 sm:rounded-[2.5rem] sm:my-4 sm:h-[95%] sm:shadow-2xl relative overflow-hidden flex flex-col transition-colors duration-300">
+        <!-- 内容将被 JS 动态渲染 -->
     </div>
+    
+    <!-- Toast 容器 -->
+    <div id="toast-container" class="fixed top-4 left-1/2 -translate-x-1/2 z-[100] pointer-events-none"></div>
 
     <script>
-        // --- 1. 题库数据 ---
+        // ========== 题库数据 ==========
         const CHAPTER_DATA = {
             "导论": [
                 { id: '0-1', type: '单选', question: "( )给中国送来了马克思列宁主义，给苦苦探寻救亡图存出路的中国人民指明了前进方向。", options: ["A. 鸦片战争", "B. 新文化运动", "C. 五四运动", "D. 十月革命"], answer: "D", explanation: "十月革命一声炮响，给中国送来了马克思列宁主义。" },
@@ -250,7 +351,7 @@
             ]
         };
 
-        // --- 2. 状态管理 ---
+        // ========== 全局状态管理 ==========
         let state = {
             view: 'dashboard',
             deck: [],
@@ -258,114 +359,222 @@
             currentCardIndex: 0,
             userAnswers: {},
             wrongQuestions: [],
+            favoriteQuestions: [],
             quizMode: 'normal',
-            hasSavedProgress: false,
-            savedChapterName: ''
+            darkMode: false,
+            showAnswerCard: false,
+            startTime: null,
+            elapsedTime: 0,
+            timerInterval: null,
+            stats: {
+                totalAnswered: 0,
+                totalCorrect: 0,
+                streak: 0,
+                maxStreak: 0,
+                chapterProgress: {},
+                studyDays: [],
+                achievements: []
+            }
         };
 
-        // --- 3. 初始化与存档 ---
-        function init() {
-            const saved = localStorage.getItem('maogai_save_v1');
-            if (saved) {
-                try {
+        // ========== 本地存储管理 ==========
+        function loadFromStorage() {
+            try {
+                const saved = localStorage.getItem('maogai_pro_v2');
+                if (saved) {
                     const parsed = JSON.parse(saved);
-                    if (parsed && parsed.deck && parsed.deck.length > 0) {
-                        state.hasSavedProgress = true;
-                        state.savedChapterName = parsed.selectedChapterName || "上次练习";
-                    }
-                } catch (e) { console.error(e); }
+                    state = { ...state, ...parsed };
+                    if (state.darkMode) document.documentElement.classList.add('dark');
+                }
+                
+                const stats = localStorage.getItem('maogai_stats_v2');
+                if (stats) {
+                    state.stats = { ...state.stats, ...JSON.parse(stats) };
+                }
+                
+                const favorites = localStorage.getItem('maogai_favorites_v2');
+                if (favorites) {
+                    state.favoriteQuestions = JSON.parse(favorites);
+                }
+                
+                const wrong = localStorage.getItem('maogai_wrong_v2');
+                if (wrong) {
+                    state.wrongQuestions = JSON.parse(wrong);
+                }
+            } catch (e) {
+                console.error('加载数据失败:', e);
             }
-            render();
         }
 
-        function saveProgress() {
-            if (state.view === 'quiz' && state.deck.length > 0) {
-                const stateToSave = {
+        function saveToStorage() {
+            try {
+                const toSave = {
                     deck: state.deck,
                     selectedChapterName: state.selectedChapterName,
                     currentCardIndex: state.currentCardIndex,
                     userAnswers: state.userAnswers,
-                    wrongQuestions: state.wrongQuestions,
                     quizMode: state.quizMode,
-                    timestamp: new Date().getTime()
+                    darkMode: state.darkMode,
+                    startTime: state.startTime,
+                    timestamp: Date.now()
                 };
-                localStorage.setItem('maogai_save_v1', JSON.stringify(stateToSave));
-                // 强制刷新界面以显示“已存”状态
-                renderQuiz(); 
+                localStorage.setItem('maogai_pro_v2', JSON.stringify(toSave));
+                localStorage.setItem('maogai_stats_v2', JSON.stringify(state.stats));
+                localStorage.setItem('maogai_favorites_v2', JSON.stringify(state.favoriteQuestions));
+                localStorage.setItem('maogai_wrong_v2', JSON.stringify(state.wrongQuestions));
+            } catch (e) {
+                console.error('保存数据失败:', e);
             }
         }
 
-        function loadProgress() {
-            const saved = localStorage.getItem('maogai_save_v1');
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                state = { ...state, ...parsed, view: 'quiz' };
-                render();
+        // ========== 工具函数 ==========
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast pointer-events-auto px-6 py-3 rounded-xl shadow-lg flex items-center gap-2 font-medium text-sm ${
+                type === 'success' ? 'bg-green-500 text-white' : 
+                type === 'error' ? 'bg-red-500 text-white' : 
+                'bg-blue-500 text-white'
+            }`;
+            
+            const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'x-circle' : 'info';
+            toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4"></i><span>${message}</span>`;
+            
+            container.appendChild(toast);
+            lucide.createIcons();
+            
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function toggleDarkMode() {
+            state.darkMode = !state.darkMode;
+            document.documentElement.classList.toggle('dark');
+            saveToStorage();
+            showToast(state.darkMode ? '已切换到深色模式' : '已切换到浅色模式', 'info');
+        }
+
+        function toggleFavorite(questionId) {
+            const index = state.favoriteQuestions.indexOf(questionId);
+            if (index > -1) {
+                state.favoriteQuestions.splice(index, 1);
+                showToast('已取消收藏', 'info');
+            } else {
+                state.favoriteQuestions.push(questionId);
+                showToast('已添加到收藏', 'success');
+            }
+            saveToStorage();
+            renderQuiz();
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            if (state.timerInterval) clearInterval(state.timerInterval);
+            state.startTime = Date.now() - (state.elapsedTime * 1000);
+            state.timerInterval = setInterval(() => {
+                state.elapsedTime = Math.floor((Date.now() - state.startTime) / 1000);
+                const timerEl = document.getElementById('timer');
+                if (timerEl) timerEl.textContent = formatTime(state.elapsedTime);
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (state.timerInterval) {
+                clearInterval(state.timerInterval);
+                state.timerInterval = null;
             }
         }
 
-        // --- 4. 业务逻辑 ---
-        function selectChapter(chapterName) {
+        function updateStats(isCorrect) {
+            state.stats.totalAnswered++;
+            if (isCorrect) {
+                state.stats.totalCorrect++;
+                state.stats.streak++;
+                if (state.stats.streak > state.stats.maxStreak) {
+                    state.stats.maxStreak = state.stats.streak;
+                }
+            } else {
+                state.stats.streak = 0;
+            }
+            
+            const today = new Date().toDateString();
+            if (!state.stats.studyDays.includes(today)) {
+                state.stats.studyDays.push(today);
+            }
+            
+            saveToStorage();
+        }
+
+        // ========== 业务逻辑 ==========
+        function startQuiz(chapterName) {
             if (chapterName === 'all') {
                 const allDecks = Object.values(CHAPTER_DATA).flat();
-                for (let i = allDecks.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [allDecks[i], allDecks[j]] = [allDecks[j], allDecks[i]];
-                }
-                state.deck = allDecks;
+                state.deck = allDecks.sort(() => Math.random() - 0.5);
                 state.selectedChapterName = "综合模拟";
+            } else if (chapterName === 'favorites') {
+                const allQuestions = Object.values(CHAPTER_DATA).flat();
+                state.deck = allQuestions.filter(q => state.favoriteQuestions.includes(q.id));
+                state.selectedChapterName = "我的收藏";
+            } else if (chapterName === 'wrong') {
+                const allQuestions = Object.values(CHAPTER_DATA).flat();
+                state.deck = allQuestions.filter(q => state.wrongQuestions.includes(q.id));
+                state.selectedChapterName = "错题强化";
             } else {
-                state.deck = CHAPTER_DATA[chapterName];
-                state.selectedChapterName = chapterName.includes(':') ? chapterName.split(':')[1] : chapterName;
+                state.deck = CHAPTER_DATA[chapterName] || [];
+                state.selectedChapterName = chapterName;
             }
-        }
-
-        function startQuiz(chapterName) {
-            selectChapter(chapterName);
+            
             state.currentCardIndex = 0;
             state.userAnswers = {};
-            state.wrongQuestions = [];
             state.quizMode = 'normal';
             state.view = 'quiz';
-            saveProgress(); // Start implies save
-            render();
-        }
-
-        function startWrongReview() {
-            const allQuestions = Object.values(CHAPTER_DATA).flat();
-            const wrongDeck = allQuestions.filter(q => state.wrongQuestions.includes(q.id));
-            state.deck = wrongDeck;
-            state.selectedChapterName = "错题强化";
-            state.currentCardIndex = 0;
-            state.userAnswers = {};
-            state.wrongQuestions = [];
-            state.quizMode = 'review_wrong';
-            state.view = 'quiz';
+            state.elapsedTime = 0;
+            startTimer();
+            saveToStorage();
             render();
         }
 
         function handleOptionClick(option) {
             if (state.userAnswers[state.currentCardIndex]) return;
-
-            state.userAnswers[state.currentCardIndex] = option;
+            
             const currentCard = state.deck[state.currentCardIndex];
-            if (option.charAt(0) !== currentCard.answer) {
-                if (!state.wrongQuestions.includes(currentCard.id)) {
-                    state.wrongQuestions.push(currentCard.id);
-                }
+            state.userAnswers[state.currentCardIndex] = option;
+            
+            const isCorrect = option.charAt(0) === currentCard.answer;
+            updateStats(isCorrect);
+            
+            if (!isCorrect && !state.wrongQuestions.includes(currentCard.id)) {
+                state.wrongQuestions.push(currentCard.id);
             }
-            saveProgress();
-            renderQuiz(); // 局部刷新
+            
+            saveToStorage();
+            
+            // 保存当前滚动位置
+            const scrollContainer = document.querySelector('.overflow-y-auto.custom-scrollbar');
+            const scrollPos = scrollContainer ? scrollContainer.scrollTop : 0;
+            
+            renderQuiz();
+            
+            // 恢复滚动位置
+            requestAnimationFrame(() => {
+                const newScrollContainer = document.querySelector('.overflow-y-auto.custom-scrollbar');
+                if (newScrollContainer) {
+                    newScrollContainer.scrollTop = scrollPos;
+                }
+            });
         }
 
         function nextQuestion() {
             if (state.currentCardIndex < state.deck.length - 1) {
                 state.currentCardIndex++;
-                saveProgress();
+                saveToStorage();
                 renderQuiz();
             } else {
-                localStorage.removeItem('maogai_save_v1');
-                state.hasSavedProgress = false;
+                stopTimer();
                 state.view = 'result';
                 render();
             }
@@ -378,7 +587,26 @@
             }
         }
 
-        // --- 5. 渲染函数 ---
+        function jumpToQuestion(index) {
+            state.currentCardIndex = index;
+            state.showAnswerCard = false;
+            renderQuiz();
+        }
+
+        function continueLastSession() {
+            state.view = 'quiz';
+            startTimer();
+            render();
+        }
+
+        function resetProgress() {
+            if (confirm('确定要清除所有学习数据吗？此操作不可恢复！')) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        // ========== 渲染函数 ==========
         const app = document.getElementById('app');
 
         function render() {
@@ -386,75 +614,141 @@
             if (state.view === 'dashboard') renderDashboard();
             else if (state.view === 'quiz') renderQuiz();
             else if (state.view === 'result') renderResult();
-            else if (state.view === 'all_questions') renderAllQuestions();
+            else if (state.view === 'stats') renderStats();
             lucide.createIcons();
         }
 
         function renderDashboard() {
             const totalQuestions = Object.values(CHAPTER_DATA).reduce((acc, curr) => acc + curr.length, 0);
+            const hasSavedProgress = state.deck.length > 0 && state.view !== 'result';
+            const accuracy = state.stats.totalAnswered > 0 ? 
+                Math.round((state.stats.totalCorrect / state.stats.totalAnswered) * 100) : 0;
             
-            let html = `
-                <div class="w-full h-full p-6 overflow-y-auto custom-scrollbar pt-12 pb-8">
-                    <div class="mb-6 relative">
-                        <div class="w-16 h-16 bg-gradient-to-tr from-blue-500 to-cyan-400 rounded-2xl shadow-lg shadow-blue-500/30 flex items-center justify-center text-white mb-4">
-                            <i data-lucide="book-open" class="w-8 h-8"></i>
-                        </div>
-                        <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">毛概刷题神器</h1>
-                        <p class="text-slate-500 font-medium mt-1">共收录 ${totalQuestions} 道真题</p>
-                    </div>
-
-                    <div class="space-y-6 pb-8">
-                        ${state.hasSavedProgress ? `
-                        <button onclick="loadProgress()" class="w-full bg-green-600 text-white py-4 px-6 rounded-xl shadow-lg shadow-green-500/20 flex justify-between items-center group fade-in-up active:scale-95 transition-all">
+            app.innerHTML = `
+                <div class="w-full h-full overflow-y-auto custom-scrollbar">
+                    <!-- 顶部栏 -->
+                    <div class="sticky top-0 z-20 glass border-b border-slate-200 dark:border-slate-700 px-6 py-4">
+                        <div class="flex items-center justify-between">
                             <div class="flex items-center gap-3">
-                                <i data-lucide="history" class="w-5 h-5"></i>
-                                <div class="text-left">
-                                    <div class="text-sm font-bold">继续上次进度</div>
-                                    <div class="text-[10px] opacity-80 font-normal truncate max-w-[150px]">${state.savedChapterName}</div>
+                                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                                    <i data-lucide="graduation-cap" class="w-5 h-5 text-white"></i>
+                                </div>
+                                <div>
+                                    <h1 class="text-lg font-bold text-slate-900 dark:text-white">毛概刷题神器</h1>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">Pro Edition</p>
                                 </div>
                             </div>
-                            <i data-lucide="chevron-right" class="w-5 h-5 opacity-60"></i>
-                        </button>` : ''}
-
-                        <div class="bg-white rounded-3xl p-5 border border-slate-100 shadow-xl shadow-slate-200/50">
-                            <div class="flex items-center justify-between mb-4">
-                                <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider">综合训练</h2>
-                                <i data-lucide="layers" class="w-4 h-4 text-slate-400"></i>
+                            <div class="flex items-center gap-2">
+                                <button onclick="state.view='stats'; render()" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300">
+                                    <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                                </button>
+                                <button onclick="toggleDarkMode()" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300">
+                                    <i data-lucide="${state.darkMode ? 'sun' : 'moon'}" class="w-5 h-5"></i>
+                                </button>
                             </div>
-                            <button onclick="startQuiz('all')" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-blue-500/20 flex items-center justify-center gap-2 active:scale-95 transition-transform">
-                                <i data-lucide="play-circle" class="w-6 h-6"></i> 随机全题库模拟
-                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-6 space-y-6 pb-20">
+                        <!-- 学习统计卡片 -->
+                        <div class="bg-gradient-to-br from-blue-500 to-purple-600 rounded-3xl p-6 text-white shadow-xl animate-scaleIn">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <p class="text-sm opacity-90 mb-1">今日学习</p>
+                                    <p class="text-3xl font-bold">${state.stats.totalAnswered}</p>
+                                    <p class="text-xs opacity-75 mt-1">题</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-sm opacity-90 mb-1">正确率</p>
+                                    <p class="text-3xl font-bold">${accuracy}%</p>
+                                    ${state.stats.streak > 0 ? `
+                                    <div class="flex items-center gap-1 justify-end mt-1">
+                                        <i data-lucide="flame" class="w-4 h-4 streak-fire"></i>
+                                        <span class="text-xs font-bold">${state.stats.streak}连对</span>
+                                    </div>` : ''}
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3 pt-4 border-t border-white/20">
+                                <div class="text-center">
+                                    <p class="text-2xl font-bold">${totalQuestions}</p>
+                                    <p class="text-xs opacity-75">总题数</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-2xl font-bold">${state.wrongQuestions.length}</p>
+                                    <p class="text-xs opacity-75">错题</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-2xl font-bold">${state.favoriteQuestions.length}</p>
+                                    <p class="text-xs opacity-75">收藏</p>
+                                </div>
+                            </div>
                         </div>
 
+                        ${hasSavedProgress ? `
+                        <button onclick="continueLastSession()" class="w-full btn-primary text-white py-4 px-6 rounded-2xl flex justify-between items-center group card-hover animate-slideIn">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="play-circle" class="w-6 h-6"></i>
+                                <div class="text-left">
+                                    <div class="font-bold">继续上次练习</div>
+                                    <div class="text-xs opacity-80">${state.selectedChapterName} · 第${state.currentCardIndex + 1}题</div>
+                                </div>
+                            </div>
+                            <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                        </button>` : ''}
+
+                        <!-- 快速开始 -->
                         <div class="space-y-3">
-                            <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider ml-2">章节专项</h2>
-                            ${Object.keys(CHAPTER_DATA).map((chapter, idx) => {
-                                const hasColon = chapter.includes(':');
-                                const prefix = hasColon ? chapter.split(':')[0] : (chapter === "导论" ? "导论" : chapter.substring(0, 3)); 
-                                const title = hasColon ? chapter.split(':')[1] : (chapter === "导论" ? "课程导论" : chapter.substring(4));
-                                return `
-                                <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm active:scale-[0.98] transition-transform flex items-center justify-between">
-                                    <div class="flex-1 pr-4">
-                                        <div class="flex items-center gap-2 mb-1">
-                                            <span class="bg-slate-100 text-slate-500 text-[10px] font-bold px-1.5 py-0.5 rounded">${prefix}</span>
-                                        </div>
-                                        <h3 class="font-bold text-slate-700 text-sm leading-tight line-clamp-1">${title}</h3>
+                            <h2 class="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-2">快速开始</h2>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button onclick="startQuiz('all')" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-left card-hover animate-slideIn" style="animation-delay: 0.1s">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-orange-400 to-pink-500 rounded-xl flex items-center justify-center mb-3">
+                                        <i data-lucide="shuffle" class="w-5 h-5 text-white"></i>
                                     </div>
-                                    <div class="flex gap-2">
-                                        <button onclick="selectChapter('${chapter}'); state.view='all_questions'; render()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-50 text-slate-400 hover:bg-slate-100">
-                                            <i data-lucide="list" class="w-5 h-5"></i>
-                                        </button>
-                                        <button onclick="startQuiz('${chapter}')" class="w-10 h-10 flex items-center justify-center rounded-xl bg-blue-50 text-blue-600 hover:bg-blue-100">
-                                            <i data-lucide="chevron-right" class="w-5 h-5"></i>
-                                        </button>
+                                    <p class="font-bold text-slate-900 dark:text-white text-sm mb-1">随机模拟</p>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">${totalQuestions}题</p>
+                                </button>
+                                
+                                ${state.wrongQuestions.length > 0 ? `
+                                <button onclick="startQuiz('wrong')" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-left card-hover animate-slideIn" style="animation-delay: 0.15s">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-red-400 to-rose-500 rounded-xl flex items-center justify-center mb-3">
+                                        <i data-lucide="alert-circle" class="w-5 h-5 text-white"></i>
                                     </div>
-                                </div>`;
-                            }).join('')}
+                                    <p class="font-bold text-slate-900 dark:text-white text-sm mb-1">错题强化</p>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">${state.wrongQuestions.length}题</p>
+                                </button>` : ''}
+                                
+                                ${state.favoriteQuestions.length > 0 ? `
+                                <button onclick="startQuiz('favorites')" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 text-left card-hover animate-slideIn" style="animation-delay: 0.2s">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-amber-500 rounded-xl flex items-center justify-center mb-3">
+                                        <i data-lucide="star" class="w-5 h-5 text-white"></i>
+                                    </div>
+                                    <p class="font-bold text-slate-900 dark:text-white text-sm mb-1">我的收藏</p>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">${state.favoriteQuestions.length}题</p>
+                                </button>` : ''}
+                            </div>
+                        </div>
+
+                        <!-- 章节列表 -->
+                        <div class="space-y-3">
+                            <h2 class="text-sm font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-2">章节专项</h2>
+                            ${Object.keys(CHAPTER_DATA).map((chapter, idx) => `
+                            <button onclick="startQuiz('${chapter}')" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl p-4 flex items-center justify-between card-hover animate-slideIn" style="animation-delay: ${0.1 + idx * 0.05}s">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-xl flex items-center justify-center text-white font-bold text-sm">
+                                        ${idx + 1}
+                                    </div>
+                                    <div class="text-left">
+                                        <p class="font-bold text-slate-900 dark:text-white text-sm">${chapter}</p>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400">${CHAPTER_DATA[chapter].length}题</p>
+                                    </div>
+                                </div>
+                                <i data-lucide="chevron-right" class="w-5 h-5 text-slate-400"></i>
+                            </button>
+                            `).join('')}
                         </div>
                     </div>
                 </div>
             `;
-            app.innerHTML = html;
         }
 
         function renderQuiz() {
@@ -462,93 +756,167 @@
             const isAnswered = !!state.userAnswers[state.currentCardIndex];
             const selectedOption = state.userAnswers[state.currentCardIndex];
             const progressPercent = ((state.currentCardIndex + 1) / state.deck.length) * 100;
+            const isFavorite = state.favoriteQuestions.includes(currentCard.id);
+            
+            const answeredCount = Object.keys(state.userAnswers).length;
+            const correctCount = Object.keys(state.userAnswers).filter(idx => {
+                const card = state.deck[idx];
+                return state.userAnswers[idx].charAt(0) === card.answer;
+            }).length;
 
-            let optionsHtml = currentCard.options.map((option, idx) => {
-                const letter = option.charAt(0);
-                let statusClass = "bg-white border-2 border-transparent shadow-sm text-slate-600";
-                let iconHtml = `<div class="w-5 h-5 rounded-full border-2 border-slate-200"></div>`;
-
-                if (isAnswered) {
-                    if (letter === currentCard.answer) {
-                        statusClass = "bg-green-50 border-green-500 text-green-700 shadow-none";
-                        iconHtml = `<i data-lucide="check-circle" class="w-5 h-5 text-green-500 fill-current"></i>`;
-                    } else if (selectedOption && letter === selectedOption.charAt(0) && letter !== currentCard.answer) {
-                        statusClass = "bg-red-50 border-red-500 text-red-700 shadow-none";
-                        iconHtml = `<i data-lucide="x-circle" class="w-5 h-5 text-red-500 fill-current"></i>`;
-                    } else {
-                        statusClass = "bg-slate-50 border-transparent text-slate-400 opacity-60 shadow-none";
-                    }
-                }
-
-                return `
-                <button onclick="handleOptionClick('${option.replace(/'/g, "\\'")}')" ${isAnswered ? 'disabled' : ''} class="w-full p-4 rounded-xl text-left font-medium text-sm transition-all duration-200 flex items-center justify-between ${statusClass} mb-3 active:scale-[0.99]">
-                    <span class="leading-snug pr-4">${option}</span>
-                    <div class="shrink-0 flex items-center justify-center w-6 h-6">${iconHtml}</div>
-                </button>`;
-            }).join('');
-
-            let html = `
-                <!-- Top Bar -->
-                <div class="px-5 pt-4 pb-3 bg-white/80 backdrop-blur-md z-10 border-b border-slate-100 flex items-center justify-between sticky top-0">
-                    <button onclick="state.view='dashboard'; render()" class="p-2 -ml-2 rounded-full hover:bg-slate-100 text-slate-600">
-                        <i data-lucide="arrow-left" class="w-6 h-6"></i>
-                    </button>
-                    <div class="flex flex-col items-center">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest max-w-[150px] truncate">${state.selectedChapterName}</span>
-                        <div class="text-base font-bold text-slate-800">
-                            <span class="text-blue-600">${state.currentCardIndex + 1}</span>
-                            <span class="text-slate-300 mx-1">/</span>${state.deck.length}
+            app.innerHTML = `
+                <div class="w-full h-full flex flex-col">
+                    <!-- 顶部栏 -->
+                    <div class="glass border-b border-slate-200 dark:border-slate-700 px-4 py-3 flex items-center justify-between">
+                        <button onclick="if(confirm('确定要退出吗？进度将会保存')) { stopTimer(); state.view='dashboard'; render(); }" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700">
+                            <i data-lucide="arrow-left" class="w-5 h-5 text-slate-600 dark:text-slate-300"></i>
+                        </button>
+                        
+                        <div class="flex flex-col items-center">
+                            <span class="text-xs font-bold text-slate-400 dark:text-slate-500">${state.selectedChapterName}</span>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="text-sm font-bold text-blue-600 dark:text-blue-400">${state.currentCardIndex + 1}</span>
+                                <span class="text-xs text-slate-300 dark:text-slate-600">/</span>
+                                <span class="text-sm font-bold text-slate-600 dark:text-slate-400">${state.deck.length}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-2">
+                            <div class="text-xs font-mono text-slate-600 dark:text-slate-400" id="timer">${formatTime(state.elapsedTime)}</div>
+                            <button onclick="state.showAnswerCard = !state.showAnswerCard; renderQuiz()" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700">
+                                <i data-lucide="grid-3x3" class="w-5 h-5 text-slate-600 dark:text-slate-300"></i>
+                            </button>
                         </div>
                     </div>
-                    <div class="w-8 h-8 flex items-center justify-center relative">
-                        <svg class="w-6 h-6 transform -rotate-90">
-                            <circle cx="12" cy="12" r="10" stroke="#F1F5F9" strokeWidth="3" fill="none" />
-                            <circle cx="12" cy="12" r="10" stroke="#3B82F6" strokeWidth="3" fill="none" strokeDasharray="62.8" strokeDashoffset="${62.8 - (62.8 * progressPercent / 100)}" />
-                        </svg>
-                        ${isAnswered ? '<div class="absolute -bottom-3 -right-2 text-[8px] text-green-500 font-bold flex items-center scale-75"><i data-lucide="save" class="w-3 h-3 mr-0.5"></i>已存</div>' : ''}
-                    </div>
-                </div>
 
-                <!-- Content -->
-                <div class="flex-1 overflow-y-auto p-6 pb-32 custom-scrollbar bg-[#F2F2F7]">
-                    <div class="mb-8 fade-in">
-                        <span class="inline-flex items-center px-2.5 py-1 bg-blue-100 text-blue-700 text-[10px] font-bold rounded-md mb-3">${currentCard.type}</span>
-                        <h2 class="text-lg md:text-xl font-bold text-slate-800 leading-relaxed tracking-tight">${currentCard.question}</h2>
+                    <!-- 进度条 -->
+                    <div class="h-1 bg-slate-100 dark:bg-slate-800">
+                        <div class="h-full bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-300" style="width: ${progressPercent}%; animation: progressFill 0.5s ease-out"></div>
                     </div>
-                    <div class="fade-in-up" style="animation-delay: 0.1s;">
-                        ${optionsHtml}
-                    </div>
-                    ${isAnswered ? `
-                    <div class="mt-8 fade-in-up pb-8" style="animation-delay: 0.2s;">
-                        <div class="bg-indigo-50/50 rounded-2xl p-5 border border-indigo-100/50 backdrop-blur-sm">
-                            <div class="flex items-center gap-2 mb-3">
-                                <div class="bg-indigo-100 p-1.5 rounded-lg"><i data-lucide="book-open" class="w-3.5 h-3.5 text-indigo-600"></i></div>
-                                <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider">答案解析</span>
+
+                    <!-- 答题卡弹窗 -->
+                    ${state.showAnswerCard ? `
+                    <div class="absolute inset-0 z-30 modal-backdrop bg-black/50 flex items-center justify-center p-4" onclick="if(event.target === this) { state.showAnswerCard = false; renderQuiz(); }">
+                        <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 max-w-md w-full max-h-[80vh] overflow-y-auto custom-scrollbar animate-scaleIn">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-white">答题卡</h3>
+                                <button onclick="state.showAnswerCard = false; renderQuiz()" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700">
+                                    <i data-lucide="x" class="w-5 h-5"></i>
+                                </button>
                             </div>
-                            <p class="text-sm text-slate-600 leading-relaxed text-justify">${currentCard.explanation}</p>
+                            <div class="mb-4 p-3 bg-slate-50 dark:bg-slate-900 rounded-xl text-sm">
+                                <div class="flex justify-between mb-2">
+                                    <span class="text-slate-600 dark:text-slate-400">已答</span>
+                                    <span class="font-bold text-slate-900 dark:text-white">${answeredCount}/${state.deck.length}</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-slate-600 dark:text-slate-400">正确</span>
+                                    <span class="font-bold text-green-600">${correctCount}</span>
+                                </div>
+                            </div>
+                            <div class="answer-card-grid">
+                                ${state.deck.map((q, idx) => {
+                                    const answered = state.userAnswers[idx];
+                                    const isCorrect = answered && answered.charAt(0) === q.answer;
+                                    const isCurrent = idx === state.currentCardIndex;
+                                    return `
+                                    <button onclick="jumpToQuestion(${idx})" class="aspect-square rounded-lg font-bold text-sm transition-all ${
+                                        isCurrent ? 'ring-2 ring-blue-500 bg-blue-500 text-white' :
+                                        answered ? (isCorrect ? 'bg-green-500 text-white' : 'bg-red-500 text-white') :
+                                        'bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600'
+                                    }">
+                                        ${idx + 1}
+                                    </button>
+                                    `;
+                                }).join('')}
+                            </div>
                         </div>
                     </div>` : ''}
-                </div>
 
-                <!-- Bottom Bar -->
-                <div class="absolute bottom-0 left-0 right-0 p-5 bg-white/90 backdrop-blur-xl border-t border-slate-100 z-20">
-                    <div class="flex gap-3 max-w-lg mx-auto">
-                        <button onclick="prevQuestion()" ${state.currentCardIndex === 0 ? 'disabled' : ''} class="flex-1 px-4 py-3 rounded-xl font-bold text-sm bg-white border border-slate-200 text-slate-700 flex items-center justify-center gap-1 disabled:opacity-50">
-                            <i data-lucide="chevron-left" class="w-4 h-4"></i> 上一题
-                        </button>
-                        ${state.currentCardIndex < state.deck.length - 1 ? 
-                        `<button onclick="nextQuestion()" ${!isAnswered ? 'disabled' : ''} class="flex-[2] px-4 py-3 rounded-xl font-bold text-sm bg-blue-600 text-white shadow-blue-500/30 flex items-center justify-center gap-1 disabled:opacity-50 disabled:bg-slate-300 disabled:shadow-none">
-                            下一题 <i data-lucide="chevron-right" class="w-4 h-4"></i>
-                        </button>` :
-                        `<button onclick="nextQuestion()" ${!isAnswered ? 'disabled' : ''} class="flex-[2] px-4 py-3 rounded-xl font-bold text-sm bg-slate-800 text-white shadow-slate-500/30 flex items-center justify-center gap-1 disabled:opacity-50">
-                            交卷查看结果
-                        </button>`
-                        }
+                    <!-- 题目内容 -->
+                    <div class="flex-1 overflow-y-auto custom-scrollbar p-6 pb-32">
+                        <div class="max-w-2xl mx-auto">
+                            <div class="flex items-start justify-between gap-4 mb-6 animate-slideIn">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 mb-3">
+                                        <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs font-bold rounded-lg">${currentCard.type}</span>
+                                        ${currentCard.tags ? currentCard.tags.map(tag => `
+                                            <span class="px-2 py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs rounded-lg">${tag}</span>
+                                        `).join('') : ''}
+                                    </div>
+                                    <h2 class="text-lg font-bold text-slate-900 dark:text-white leading-relaxed">${currentCard.question}</h2>
+                                </div>
+                                <button onclick="toggleFavorite('${currentCard.id}')" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 shrink-0">
+                                    <i data-lucide="star" class="w-5 h-5 ${isFavorite ? 'fill-yellow-400 text-yellow-400' : 'text-slate-400'}"></i>
+                                </button>
+                            </div>
+
+                            <div class="space-y-3 animate-slideIn" style="animation-delay: 0.1s">
+                                ${currentCard.options.map((option, idx) => {
+                                    const letter = option.charAt(0);
+                                    let statusClass = "bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300";
+                                    let iconHtml = `<div class="w-6 h-6 rounded-full border-2 border-slate-300 dark:border-slate-600"></div>`;
+
+                                    if (isAnswered) {
+                                        if (letter === currentCard.answer) {
+                                            statusClass = "bg-green-50 dark:bg-green-900/20 border-green-500 text-green-700 dark:text-green-400";
+                                            iconHtml = `<i data-lucide="check-circle" class="w-6 h-6 text-green-500 fill-current"></i>`;
+                                        } else if (selectedOption && letter === selectedOption.charAt(0)) {
+                                            statusClass = "bg-red-50 dark:bg-red-900/20 border-red-500 text-red-700 dark:text-red-400 animate-shake";
+                                            iconHtml = `<i data-lucide="x-circle" class="w-6 h-6 text-red-500 fill-current"></i>`;
+                                        } else {
+                                            statusClass = "bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-400 opacity-60";
+                                        }
+                                    }
+
+                                    return `
+                                    <button onclick="handleOptionClick('${option.replace(/'/g, "\\'")}')" ${isAnswered ? 'disabled' : ''} 
+                                        class="option-btn w-full p-4 rounded-xl text-left font-medium text-sm flex items-center justify-between ${statusClass}">
+                                        <span class="leading-snug pr-4">${option}</span>
+                                        ${iconHtml}
+                                    </button>`;
+                                }).join('')}
+                            </div>
+
+                            ${isAnswered ? `
+                            <div class="mt-6 animate-slideIn" style="animation-delay: 0.2s">
+                                <div class="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-2xl p-5 border border-indigo-100 dark:border-indigo-800">
+                                    <div class="flex items-center gap-2 mb-3">
+                                        <div class="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center">
+                                            <i data-lucide="lightbulb" class="w-4 h-4 text-white"></i>
+                                        </div>
+                                        <span class="text-sm font-bold text-indigo-900 dark:text-indigo-300">答案解析</span>
+                                    </div>
+                                    <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">${currentCard.explanation}</p>
+                                </div>
+                            </div>` : ''}
+                        </div>
+                    </div>
+
+                    <!-- 底部操作栏 -->
+                    <div class="glass border-t border-slate-200 dark:border-slate-700 p-4">
+                        <div class="flex gap-3 max-w-2xl mx-auto">
+                            <button onclick="prevQuestion()" ${state.currentCardIndex === 0 ? 'disabled' : ''} 
+                                class="flex-1 px-4 py-3 rounded-xl font-bold text-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 flex items-center justify-center gap-2 disabled:opacity-30 card-hover">
+                                <i data-lucide="chevron-left" class="w-4 h-4"></i> 上一题
+                            </button>
+                            ${state.currentCardIndex < state.deck.length - 1 ? 
+                            `<button onclick="nextQuestion()" ${!isAnswered ? 'disabled' : ''} 
+                                class="flex-[2] btn-primary text-white px-4 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-30 disabled:shadow-none card-hover">
+                                下一题 <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                            </button>` :
+                            `<button onclick="nextQuestion()" ${!isAnswered ? 'disabled' : ''} 
+                                class="flex-[2] bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-30 shadow-lg shadow-green-500/30 card-hover">
+                                <i data-lucide="check-circle" class="w-4 h-4"></i> 完成
+                            </button>`
+                            }
+                        </div>
                     </div>
                 </div>
             `;
-            app.innerHTML = html;
+            
             lucide.createIcons();
+            if (state.timerInterval) startTimer();
         }
 
         function renderResult() {
@@ -558,82 +926,217 @@
                 return state.userAnswers[idx].charAt(0) === card.answer;
             }).length;
             const accuracy = total > 0 ? Math.round((correct / total) * 100) : 0;
+            const timeSpent = formatTime(state.elapsedTime);
+            
+            let message = '';
+            let emoji = '';
+            if (accuracy === 100) {
+                message = '完美！全部正确！';
+                emoji = '🎉';
+            } else if (accuracy >= 90) {
+                message = '太棒了！继续保持！';
+                emoji = '🌟';
+            } else if (accuracy >= 80) {
+                message = '很不错！再接再厉！';
+                emoji = '👍';
+            } else if (accuracy >= 60) {
+                message = '还不错，继续努力！';
+                emoji = '💪';
+            } else {
+                message = '加油！多练习会更好！';
+                emoji = '📚';
+            }
 
-            let html = `
-                <div class="w-full h-full flex flex-col items-center justify-center p-8 text-center bg-[#F2F2F7]">
-                    <div class="relative mb-8">
-                        <svg class="w-40 h-40 transform -rotate-90">
-                            <circle cx="80" cy="80" r="70" stroke="#E2E8F0" stroke-width="12" fill="none" />
-                            <circle cx="80" cy="80" r="70" stroke="${accuracy >= 60 ? '#22C55E' : '#EF4444'}" stroke-width="12" fill="none" stroke-dasharray="439.6" stroke-dashoffset="${439.6 - (439.6 * accuracy / 100)}" stroke-linecap="round" class="transition-all duration-1000" />
-                        </svg>
-                        <div class="absolute inset-0 flex flex-col items-center justify-center">
-                            <span class="text-4xl font-extrabold text-slate-800 tracking-tighter">${accuracy}%</span>
-                            <span class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">正确率</span>
+            app.innerHTML = `
+                <div class="w-full h-full flex flex-col items-center justify-center p-8 text-center bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800">
+                    <div class="animate-scaleIn">
+                        <div class="text-6xl mb-6 animate-bounce-slow">${emoji}</div>
+                        
+                        <div class="relative mb-8">
+                            <svg class="w-48 h-48 transform -rotate-90">
+                                <circle cx="96" cy="96" r="88" stroke="#E2E8F0" stroke-width="12" fill="none" class="dark:stroke-slate-700" />
+                                <circle cx="96" cy="96" r="88" stroke="${accuracy >= 60 ? '#22C55E' : '#EF4444'}" stroke-width="12" fill="none" 
+                                    stroke-dasharray="552.9" stroke-dashoffset="${552.9 - (552.9 * accuracy / 100)}" 
+                                    stroke-linecap="round" class="progress-ring" />
+                            </svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                <span class="text-5xl font-extrabold gradient-text">${accuracy}%</span>
+                                <span class="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest mt-2">正确率</span>
+                            </div>
+                        </div>
+                        
+                        <h2 class="text-2xl font-bold mb-2 text-slate-900 dark:text-white">${message}</h2>
+                        <p class="text-slate-600 dark:text-slate-400 mb-8 text-sm">
+                            本次练习共 ${state.deck.length} 题 · 答对 ${correct} 题 · 用时 ${timeSpent}
+                        </p>
+
+                        <div class="grid grid-cols-3 gap-4 mb-8 max-w-md mx-auto">
+                            <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-200 dark:border-slate-700">
+                                <div class="text-3xl font-bold text-green-600">${correct}</div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">答对</div>
+                            </div>
+                            <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-200 dark:border-slate-700">
+                                <div class="text-3xl font-bold text-red-600">${total - correct}</div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">答错</div>
+                            </div>
+                            <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-200 dark:border-slate-700">
+                                <div class="text-3xl font-bold text-blue-600">${state.stats.maxStreak}</div>
+                                <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">最高连对</div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3 max-w-md mx-auto">
+                            ${state.wrongQuestions.length > 0 ? `
+                            <button onclick="startQuiz('wrong')" class="w-full bg-gradient-to-r from-red-500 to-rose-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-red-500/30 flex items-center justify-center gap-2 card-hover">
+                                <i data-lucide="refresh-cw" class="w-5 h-5"></i> 复习错题 (${state.wrongQuestions.length})
+                            </button>` : ''}
+                            
+                            <button onclick="startQuiz(state.selectedChapterName === '综合模拟' ? 'all' : state.selectedChapterName)" 
+                                class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-500/30 flex items-center justify-center gap-2 card-hover">
+                                <i data-lucide="rotate-ccw" class="w-5 h-5"></i> 再来一次
+                            </button>
+                            
+                            <button onclick="state.view='dashboard'; render()" 
+                                class="w-full bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 py-4 rounded-2xl font-bold border border-slate-200 dark:border-slate-700 flex items-center justify-center gap-2 card-hover">
+                                <i data-lucide="home" class="w-5 h-5"></i> 返回主页
+                            </button>
                         </div>
                     </div>
-                    
-                    <h2 class="text-2xl font-bold mb-2 text-slate-800">
-                        ${accuracy === 100 ? "太棒了！全对！" : accuracy >= 60 ? "不错，继续加油！" : "还需要多加练习哦"}
-                    </h2>
-                    <p class="text-slate-500 mb-8 font-medium text-sm">
-                        本次${state.quizMode === 'review_wrong' ? '错题复习' : '练习'}共 ${state.deck.length} 题<br/>
-                        答对 ${correct} 题 · 错题 ${state.wrongQuestions.length} 题
-                    </p>
-
-                    <div class="w-full space-y-3">
-                        ${state.wrongQuestions.length > 0 && state.quizMode !== 'review_wrong' ? `
-                        <button onclick="startWrongReview()" class="w-full bg-red-500 text-white py-4 rounded-xl font-bold shadow-lg shadow-red-500/30 flex items-center justify-center gap-2 active:scale-95 transition-transform">
-                            <i data-lucide="refresh-cw" class="w-5 h-5"></i> 复习错题 (${state.wrongQuestions.length})
-                        </button>` : ''}
-                        
-                        <button onclick="state.view='dashboard'; render()" class="w-full bg-white text-slate-600 py-4 rounded-xl font-bold border border-slate-200 flex items-center justify-center gap-2 hover:bg-slate-50">
-                            返回主页
-                        </button>
-                    </div>
                 </div>
             `;
-            app.innerHTML = html;
-            lucide.createIcons();
         }
 
-        function renderAllQuestions() {
-            let html = `
-                <div class="px-6 py-4 bg-white/90 backdrop-blur-md border-b border-slate-100 flex items-center gap-4 z-10 sticky top-0">
-                    <button onclick="state.view='dashboard'; render()" class="p-2 -ml-2 rounded-full hover:bg-slate-50 text-slate-600">
-                        <i data-lucide="arrow-left" class="w-6 h-6"></i>
-                    </button>
-                    <div class="flex flex-col">
-                        <h2 class="text-base font-bold text-slate-800">背题模式</h2>
-                        <span class="text-xs font-medium text-slate-400">${state.selectedChapterName}</span>
+        function renderStats() {
+            const totalQuestions = Object.values(CHAPTER_DATA).reduce((acc, curr) => acc + curr.length, 0);
+            const accuracy = state.stats.totalAnswered > 0 ? 
+                Math.round((state.stats.totalCorrect / state.stats.totalAnswered) * 100) : 0;
+            const studyDays = state.stats.studyDays.length;
+
+            app.innerHTML = `
+                <div class="w-full h-full overflow-y-auto custom-scrollbar">
+                    <!-- 顶部栏 -->
+                    <div class="glass border-b border-slate-200 dark:border-slate-700 px-6 py-4 flex items-center justify-between">
+                        <button onclick="state.view='dashboard'; render()" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700">
+                            <i data-lucide="arrow-left" class="w-5 h-5 text-slate-600 dark:text-slate-300"></i>
+                        </button>
+                        <h1 class="text-lg font-bold text-slate-900 dark:text-white">学习统计</h1>
+                        <button onclick="resetProgress()" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-red-500">
+                            <i data-lucide="trash-2" class="w-5 h-5"></i>
+                        </button>
                     </div>
-                </div>
-                <div class="flex-1 overflow-y-auto p-4 custom-scrollbar bg-[#F2F2F7]">
-                    ${state.deck.map((item, index) => {
-                        return `
-                        <div class="bg-white rounded-2xl p-5 mb-4 shadow-sm border border-slate-100/50">
-                            <div class="flex items-start justify-between gap-4 mb-3">
-                                <div class="text-[10px] font-bold text-blue-500 bg-blue-50 px-2 py-1 rounded-md shrink-0">#${index + 1}</div>
-                                <div class="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded-md shrink-0">${item.type}</div>
+
+                    <div class="p-6 space-y-6 pb-20">
+                        <!-- 总体统计 -->
+                        <div class="bg-gradient-to-br from-purple-500 to-pink-600 rounded-3xl p-6 text-white shadow-xl animate-scaleIn">
+                            <h2 class="text-sm opacity-90 mb-4 uppercase tracking-wider">总体数据</h2>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <div class="text-4xl font-bold mb-1">${state.stats.totalAnswered}</div>
+                                    <div class="text-xs opacity-75">累计答题</div>
+                                </div>
+                                <div>
+                                    <div class="text-4xl font-bold mb-1">${accuracy}%</div>
+                                    <div class="text-xs opacity-75">总正确率</div>
+                                </div>
+                                <div>
+                                    <div class="text-4xl font-bold mb-1">${studyDays}</div>
+                                    <div class="text-xs opacity-75">学习天数</div>
+                                </div>
+                                <div>
+                                    <div class="text-4xl font-bold mb-1">${state.stats.maxStreak}</div>
+                                    <div class="text-xs opacity-75">最高连对</div>
+                                </div>
                             </div>
-                            <h3 class="text-base font-bold text-slate-800 mb-4 leading-relaxed">${item.question}</h3>
-                            <div class="space-y-2 mb-4">
-                                ${item.options.map(opt => {
-                                    const isCorrect = opt.charAt(0) === item.answer;
-                                    return `<div class="text-sm px-4 py-3 rounded-xl border ${isCorrect ? 'bg-green-50 border-green-200 text-green-700 font-bold' : 'bg-slate-50 border-transparent text-slate-500'}">${opt}</div>`
+                        </div>
+
+                        <!-- 学习进度 -->
+                        <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 border border-slate-200 dark:border-slate-700 animate-slideIn">
+                            <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4">学习进度</h2>
+                            <div class="space-y-4">
+                                <div>
+                                    <div class="flex justify-between text-sm mb-2">
+                                        <span class="text-slate-600 dark:text-slate-400">题库完成度</span>
+                                        <span class="font-bold text-slate-900 dark:text-white">${Math.round((state.stats.totalAnswered / totalQuestions) * 100)}%</span>
+                                    </div>
+                                    <div class="h-3 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-500" 
+                                            style="width: ${Math.min((state.stats.totalAnswered / totalQuestions) * 100, 100)}%"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-3 gap-3 pt-4 border-t border-slate-100 dark:border-slate-700">
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-slate-900 dark:text-white">${totalQuestions}</div>
+                                        <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">总题数</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-green-600">${state.stats.totalCorrect}</div>
+                                        <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">答对</div>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-2xl font-bold text-red-600">${state.wrongQuestions.length}</div>
+                                        <div class="text-xs text-slate-500 dark:text-slate-400 mt-1">错题</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 章节统计 -->
+                        <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 border border-slate-200 dark:border-slate-700 animate-slideIn" style="animation-delay: 0.1s">
+                            <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-4">章节统计</h2>
+                            <div class="space-y-3">
+                                ${Object.keys(CHAPTER_DATA).map(chapter => {
+                                    const chapterQuestions = CHAPTER_DATA[chapter];
+                                    const chapterWrong = chapterQuestions.filter(q => state.wrongQuestions.includes(q.id)).length;
+                                    const chapterFavorite = chapterQuestions.filter(q => state.favoriteQuestions.includes(q.id)).length;
+                                    
+                                    return `
+                                    <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-900 rounded-xl">
+                                        <div class="flex-1">
+                                            <div class="font-bold text-sm text-slate-900 dark:text-white mb-1">${chapter}</div>
+                                            <div class="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400">
+                                                <span>共${chapterQuestions.length}题</span>
+                                                ${chapterWrong > 0 ? `<span class="text-red-500">错${chapterWrong}</span>` : ''}
+                                                ${chapterFavorite > 0 ? `<span class="text-yellow-500">藏${chapterFavorite}</span>` : ''}
+                                            </div>
+                                        </div>
+                                        <button onclick="startQuiz('${chapter}')" class="px-3 py-1.5 bg-blue-500 text-white text-xs font-bold rounded-lg hover:bg-blue-600">
+                                            练习
+                                        </button>
+                                    </div>
+                                    `;
                                 }).join('')}
                             </div>
-                            <div class="pt-4 border-t border-slate-50 mt-4">
-                                <p class="text-xs text-slate-500 leading-relaxed bg-slate-50 p-3 rounded-lg">
-                                    <span class="font-bold text-slate-700 block mb-1">解析：</span>${item.explanation}
-                                </p>
+                        </div>
+
+                        <!-- 学习建议 -->
+                        <div class="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-3xl p-6 border border-amber-200 dark:border-amber-800 animate-slideIn" style="animation-delay: 0.2s">
+                            <div class="flex items-center gap-2 mb-3">
+                                <i data-lucide="lightbulb" class="w-5 h-5 text-amber-600"></i>
+                                <h2 class="text-lg font-bold text-slate-900 dark:text-white">学习建议</h2>
                             </div>
-                        </div>`;
-                    }).join('')}
-                    <div class="h-10"></div>
+                            <ul class="space-y-2 text-sm text-slate-700 dark:text-slate-300">
+                                ${state.wrongQuestions.length > 10 ? 
+                                    '<li>• 错题较多，建议重点复习错题集</li>' : 
+                                    '<li>• 错题控制得不错，继续保持！</li>'}
+                                ${accuracy < 80 ? 
+                                    '<li>• 正确率还有提升空间，多做练习</li>' : 
+                                    '<li>• 正确率很高，可以尝试综合模拟</li>'}
+                                ${studyDays < 7 ? 
+                                    '<li>• 坚持每天学习，养成良好习惯</li>' : 
+                                    '<li>• 学习习惯很好，继续坚持！</li>'}
+                                <li>• 建议使用收藏功能标记重点题目</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             `;
-            app.innerHTML = html;
-            lucide.createIcons();
+        }
+
+        // ========== 初始化 ==========
+        function init() {
+            loadFromStorage();
+            render();
         }
 
         // 启动应用
